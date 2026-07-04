@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manisudhan | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script></head>
+<body>
+
+    <video autoplay muted loop playsinline preload="auto" class="bg-video">
+    <source src="background.mp4" type="video/mp4">
+</video>
+    <nav class="navbar">
+        <a href="#page1">About</a>
+        <a href="#page2">Skills</a>
+        <a href="#page3">Projects</a>
+        <a href="#page4">Contact</a>
+    </nav>
+
+    <main class="scroll-container">
+          
+        <section id="page1" class="page">
+            <div class="page-content align-split-row">
+                
+                <div class="intro-text-column">
+                    <h1 class="giant-heading">About Me</h1>
+                    <div class="bio-text">
+                        <h2>I am Manisudhan</h2> 
+                        <h3>Pursuing B.Tech in Computer Science at Shiv Nadar University</h3> 
+                        <p class="highlight">Building robust backend technologies and scalable cloud solutions.</p> 
+                    </div>
+                </div>
+
+                <div class="intro-animation-column">
+                    <lottie-player 
+                        src="Backend Icon.json" 
+                        background="transparent" 
+                        speed="1" 
+                        loop 
+                        autoplay>
+                    </lottie-player>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="page2" class="page">
+            <div class="page-content">
+                <h1 class="giant-heading">Skills & Credentials</h1>
+                
+                <div class="skills-grid">
+                    <div class="skills-category">
+                        <h2>Languages</h2>
+                        <p>Java </p>
+                        <p>Python</p>  
+                        <p>Node.js (JavaScript)</p>
+                        <p>SQL</p> 
+                        <p>C++</p>  
+                        <p>HTML/CSS</p>
+                    </div>
+                    <div class="skills-category">
+                        <h2>Backend & Cloud</h2>
+                        <p>AWS (EC2, S3, ALB, VPC)</p>
+                        <p>Express.js</p>  
+                        <p>RESTful APIs</p>
+                    </div>
+                    <div class="skills-category">
+                        <h2>DevOps & Databases</h2>
+                        <p>Docker</p>
+<p>Linux/Bash</p>
+<p>Git</p>
+<p>GitHub Actions</p>
+<p>PostgreSQL</p>
+<p>Supabase</p>
+<p>MySQL</p>
+
+                    </div>
+                    <div class="skills-category">
+                        <h2>Other skills</h2>
+<p>DSA</p>
+<p>OOPS</p>
+<p>Low level System design</p>
+<p>Agile framework</p>
+                    </div>
+                </div>
+
+    <div class="badge-container">
+    
+    <a href="https://www.credly.com/badges/6ed8263a-8884-4949-bc41-3a5e2350262b/public_url" 
+       target="_blank" 
+       class="certificate-badge aws-badge-link">
+        <img src="https://images.credly.com/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png" 
+             alt="AWS Certified Solutions Architect – Associate" 
+             class="badge-img">
+    </a>
+
+    <div class="certificate-badge">
+        <img src="Screenshot 2026-07-02 235940.png" 
+             alt="Infosys Springboard Internship Certificate" 
+             class="badge-img">
+    </div>
+</div>
+            </div>
+        </section>
+
+<section id="page3" class="page">
+    <div class="page-content wide-layout">
+        <h1 class="giant-heading">Featured Projects</h1>
+        
+        <div class="projects-container">
+            
+            <article class="project-card" data-index="1">
+                <div class="project-info-side">
+                    <div class="project-header">
+                        <h3>Automated Traffic Violation Detection System</h3>
+                        <div class="proj-btn">
+                        <span class="project-date">2026</span>
+                        <a href="https://github.com/manisudhan/smart_traffic_violation_detection">LINK</a>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p class="tech-desc">Engineered an intelligent, real-time computer vision pipeline utilizing YOLOv8 and OpenCV to automate traffic monitoring and violation detection. Designed and trained a custom deep learning network optimized for cabin-level inference to accurately detect seatbelt compliance. Processed multi-thread video streams to maximize inference frame-rates, structuring raw object detection outputs into streaming JSON data for backend analytics.</p>
+                    </div>
+                    <div class="project-tech-tags">
+                        <span>Python</span><span>YOLOv8</span><span>OpenCV</span><span>Deep Learning</span>
+                    </div>
+                </div>
+                <div class="project-demo-side">
+                    <div class="aspect-ratio-box">
+                        <img src="Screenshot 2026-07-03 201341.png" alt="Traffic Project Demo" class="demo-img">
+                    </div>
+                </div>
+                <button class="side-dropdown-btn" onclick="toggleStackDemo(this)" aria-label="Toggle Project Demo">
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </article>
+
+            <article class="project-card" data-index="2">
+                <div class="project-info-side">
+                    <div class="project-header">
+                        <h3>Automated CI/CD Deployment Pipeline</h3>
+                        <div class="proj-btn">
+                        <span class="project-date">2026</span>
+                        <a href="https://workk.digital/login">LINK</a>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p class="tech-desc">Architected an automated deployment pipeline linking GitHub repositories natively to AWS EC2 instances. Configured secure repository webhooks combined with custom multi-stage Linux bash scripts that listen for push events, automatically pulling live source code, isolating environments, and restarting backend daemons to achieve zero-downtime updates.</p>
+                    </div>
+                    <div class="project-tech-tags">
+                        <span>AWS EC2</span><span>Linux/Bash</span><span>Git</span><span>Webhooks</span><span>Node.js</span>
+                    </div>
+                </div>
+                <div class="project-demo-side">
+                    <div class="aspect-ratio-box" >
+                        <img src="Screenshot 2026-07-03 193001.png" alt="CI/CD Project Demo" class="demo-img">
+                        <p style="background-color: #0b1220;font-family :  BlinkMacSystemFont, 'Segoe UI'">This is the project I deployed in EC2 instance with proxy server of cloudfalre which handles URL routing of frontend(vercel) and backend(EC2) and NeonDB database</p>
+                    </div>
+                </div>
+                <button class="side-dropdown-btn" onclick="toggleStackDemo(this)" aria-label="Toggle Project Demo">
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </article>
+
+            <article class="project-card" data-index="3">
+                <div class="project-info-side">
+                    <div class="project-header">
+                        <h3>NoteNest Productivity Extension</h3>
+                        <div class="proj-btn">
+                        <span class="project-date">2026</span>
+                        <a href="https://chromewebstore.google.com/detail/notenest/kmnjeipmihpgigkoaceajfciehjimldi">LINK</a>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p class="tech-desc">Engineered a multi-threaded asynchronous side-panel Chrome extension designed for high-performance productivity and folder-based note management. Implemented IndexedDB client-side database modules for fast, transactional local storage, completely mitigating server network latency. Deployed and published on the Chrome Web Store, organically scaling to 300+ production users.</p>
+                    </div>
+                    <div class="project-tech-tags">
+                        <span>Node.js</span><span>JavaScript</span><span>IndexedDB</span><span>Chrome API</span>
+                    </div>
+                </div>
+                <div class="project-demo-side">
+                    <div class="aspect-ratio-box">
+                        <img src="Screenshot 2026-07-03 202912.png" alt="NoteNest Project Demo" class="demo-img">
+                    </div>
+                </div>
+                <button class="side-dropdown-btn" onclick="toggleStackDemo(this)" aria-label="Toggle Project Demo">
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<script>
+function toggleStackDemo(button) {
+    const currentCard = button.closest('.project-card');
+    const container = currentCard.closest('.projects-container');
+    const isExpanded = currentCard.classList.contains('expanded');
+    const currentIndex = parseInt(currentCard.getAttribute('data-index'));
+    
+    // 1. Reset all cards to baseline positions and dimensions
+    container.querySelectorAll('.project-card').forEach(card => {
+        card.classList.remove('expanded');
+        card.classList.remove('goes-behind');
+        card.style.transform = '';
+        card.style.width = '380px'; 
+    });
+    
+    if (!isExpanded) {
+        // 2. Expand the active card width safely first
+        currentCard.classList.add('expanded');
+        currentCard.style.width = '860px'; // 380px text + 380px laptop frame
+        
+        // 3. Dynamic Center Alignment Calculation
+        const cardRect = currentCard.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        
+        // Find the center point of the screen minus half the expanded card's width
+        const desiredLeft = (viewportWidth / 2) - (560 / 2);
+        // Calculate the exact offset shift needed from its current resting position
+        const centerShift = desiredLeft - cardRect.left;
+        
+        // Smoothly glide the active card to the center of the viewport screen
+        currentCard.style.transform = `translateX(${centerShift}px)`;
+        
+        // 4. Stacking mechanics for all other cards
+        container.querySelectorAll('.project-card').forEach(card => {
+            const cardIndex = parseInt(card.getAttribute('data-index'));
+            
+            if (cardIndex !== currentIndex) {
+                card.classList.add('goes-behind');
+                
+                if (cardIndex > currentIndex) {
+                    // Cards to the right slide left underneath the active center canvas
+                    const slideDistance = 860 - 380; 
+                    const staggerOffset = (cardIndex - currentIndex) * 25;
+                    
+                    // Incorporate the centerShift so they stay relative to the moving active card
+                    card.style.transform = `translateX(${centerShift - slideDistance + staggerOffset}px)`;
+                } else {
+                    // Cards to the left slide slightly right to tuck beneath neatly
+                    const staggerOffset = (currentIndex - cardIndex) * 25;
+                    card.style.transform = `translateX(${centerShift - staggerOffset}px)`;
+                }
+            }
+        });
+    }
+}
+</script>
+
+        <section id="page4" class="page">
+    <div class="page-content contact-layout">
+        <h1 class="giant-heading">Get In Touch</h1>
+        <p class="contact-sub">Click any item below to copy it to your clipboard.</p>
+        
+        <div class="contact-links">
+            <a href="Manisudhan (2).pdf" download="Manisudhan_Resume.pdf" class="contact-item resume-btn">
+                <span class="contact-label" style="color: #99ff33;">Resume</span>
+                <span class="contact-value" style="color: #99ff33;">Download PDF ↓</span>
+            </a>
+            <div class="contact-item copyable" onclick="copyToClipboard('+918220002155', this)" title="Click to copy phone number">
+                <span class="contact-label">Phone</span>
+                <span class="contact-value">+91 8220002155</span>
+            </div>
+
+            <div class="contact-item copyable" onclick="copyToClipboard('m.manisudhan19@gmail.com', this)" title="Click to copy email address">
+                <span class="contact-label">Email</span>
+                <span class="contact-value">m.manisudhan19@gmail.com</span>
+            </div>
+
+            <a href="https://github.com/manisudhan" target="_blank" class="contact-item">
+                <span class="contact-label">GitHub</span>
+                <span class="contact-value">github.com/manisudhan</span>
+            </a>
+            <a href="https://www.linkedin.com/public-profile/settings/?trk=d_flagship3_profile_self_view_public_profile&lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BoJVjXA%2B%2FTQa%2BrNtCFxR9Xg%3D%3D" target="_blank" class="contact-item">
+                <span class="contact-label">Linkedin</span>
+                <span class="contact-value">linkedin.com/in/manisudhan</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+function copyToClipboard(text, element) {
+    // 1. Use the modern Clipboard API to copy the raw text string
+    navigator.clipboard.writeText(text).then(() => {
+        // 2. Locate the specific label span inside the clicked card component
+        const label = element.querySelector('.contact-label');
+        const originalText = label.innerText;
+        
+        // 3. Update text styling to show instant confirmation feedback
+        label.innerText = 'Copied!';
+        label.style.color = '#99ff33';
+        
+        // 4. Smoothly revert back to original label state after 2 seconds
+        setTimeout(() => {
+            label.innerText = originalText;
+            label.style.color = ''; // Reverts to CSS default slate color
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+</script>
+
+    </main>
+
+</body>
+</html>

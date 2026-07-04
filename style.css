@@ -1,0 +1,873 @@
+/* ==========================================
+   1. SYSTEM RESET & TRANSPARENT ROOT LAYER
+   ========================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+    scroll-behavior: smooth;
+    
+    /* 1. REMOVE THE SOLID BACKDROP PAINT FROM THE ROOT nodes */
+    background: transparent !important; 
+    position: relative;
+}
+
+/* ==========================================
+   THE LAYERED BACKDROP STACK (FIXED)
+   ========================================== */
+
+/* LAYER 1 (DEEPEST): The absolute fallback color base */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #020024; /* Your signature dark baseline color */
+    z-index: -3;               /* The absolute deepest layer */
+    pointer-events: none;
+}
+
+/* LAYER 2 (MIDDLE): The actual streaming video component */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; 
+    z-index: -2;               /* Sits safely on top of the fallback color layer */
+    pointer-events: none; 
+}
+
+/* LAYER 3 (OPTIONAL TINT): Darkens the video slightly so text is readable */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 0, 36, 0.4); /* 40% dark overlay layer tint */
+    z-index: -1;                     /* Sits directly on top of the video player */
+    pointer-events: none;
+}
+
+/* Keep your page wrappers transparent so the video is visible underneath */
+#page1, #page2, #page3, #page4 {
+    background: transparent !important;
+}
+
+/* ==========================================
+   THE CRUCIAL BACKGROUND FIX
+   Stripping solid color walls so the global animated layers show through
+   ========================================== */
+#page1, #page2, #page3, #page4 {
+    background: transparent !important;
+}
+
+
+
+/* ==========================================
+   2. FIXED NAVIGATION BAR
+   ========================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 10px 0;
+    background: rgba(31, 47, 84, 0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(153, 255, 51, 0.08);
+}
+
+.navbar a {
+    color: #94a3b8; /* Slate gray by default */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    padding-left: 70px;
+    padding-right: 70px;
+    text-align: center;
+}
+
+.navbar a:hover {
+    color: #99ff33; /* Neon highlight */
+    text-shadow: 0 0 12px rgba(153, 255, 51, 0.5);
+    transform: translateY(2px);
+}
+
+/* ==========================================
+   3. SCROLL SNAP ENGINE
+   ========================================== */
+.scroll-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    position: relative !important;
+    z-index: 1 !important;
+    background: transparent !important;
+}
+
+.scroll-container::-webkit-scrollbar {
+    width: 0px; /* Hidden scrollbar for native app aesthetic */
+}
+
+/* ==========================================
+   4. LAYOUT COMPONENT STRUCTURING
+   ========================================== */
+.page {
+    height: 100vh;
+    width: 100vw;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center; /* Center horizontally by default */
+    align-items: center;     /* Center vertically by default */
+    box-sizing: border-box;
+    padding: 0 10%;
+}
+
+/* Main internal layout wrapper */
+.page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Custom alignment rule for Page 1 (Mid-Left-Top layout positioning) */
+.page-content.align-left-center {
+    width: 100%;
+    max-width: 1200px;
+    align-items: flex-start; /* Aligns content to the left side */
+    padding-left: 10%;       /* Pushes it halfway out toward the center */
+    margin-top: -50px;       /* Balances vertical centering upwards */
+}
+
+/* ==========================================
+   5. TYPOGRAPHIC HIERARCHY (BIG vs small)
+   ========================================== */
+.giant-heading {
+    font-size: 5.5rem;
+    font-weight: 900;
+    letter-spacing: -3px;
+    color: #99ff33;
+    text-shadow: 0 0 40px rgba(153, 255, 51, 0.2);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.bio-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bio-text h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0;
+    color: #ffffff;
+}
+
+.bio-text h3 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.highlight {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #99ff33;
+    margin-top: 15px;
+    max-width: 700px;
+    line-height: 1.4;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #cececf;
+    margin: 0;
+}
+
+/* ==========================================
+   6. SCROLL TIMELINE ANIMATION
+   ========================================== */
+.page-content {
+    animation: scrollSlide linear both;
+    animation-timeline: view();
+    animation-range: entry 15% cover 45%;
+}
+
+@keyframes scrollSlide {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+    }
+}
+
+/* ==========================================
+   8. DYNAMIC DECK STACKING ENGINE
+   ========================================== */
+.page-content.wide-layout {
+    width: 100%;
+    max-width: 1500px;
+    align-items: center;
+    justify-content: center;
+}
+
+.projects-container {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
+    align-items: stretch;
+    overflow: visible !important; 
+    gap: 15px;
+    justify-content: center;
+}
+
+.project-card {
+    width: 270px; 
+    background: oklch(18.312% 0.03092 263.398) !important; 
+    border: 1px solid rgba(153, 255, 51, 0.1);
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: row; 
+    gap: 0px;
+    position: relative;
+    overflow: visible; 
+    padding-right: 60px;
+    z-index: 5;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1),
+                width 0.5s cubic-bezier(0.25, 1, 0.3, 1),
+                border-color 0.3s ease, 
+                background-color 0.3s ease,
+                box-shadow 0.4s ease;
+}
+
+.project-card.expanded {
+    background: #0b1220 !important; 
+    border-color: rgba(153, 255, 51, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    z-index: 40; 
+    width: 960px;
+}
+
+.project-card.goes-behind {
+    z-index: 1 !important; 
+    pointer-events: none;  
+    opacity: 0.35;         
+}
+
+.project-info-side {
+    width: 295px; 
+    flex-shrink: 0; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project-demo-side {
+    width: 0px;
+    opacity: 0;
+    visibility: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.5s ease, opacity 0.3s ease, visibility 0.5s ease;
+    background-color: #1e335c;
+}
+
+.project-card.expanded .project-demo-side {
+    width: 545px; 
+    opacity: 1;
+    visibility: visible;
+    background-color: #0b1220;
+}
+
+.project-card:hover {
+    border-color: rgba(153, 255, 51, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 20; 
+    background: rgba(153, 255, 51, 0.02);
+    transform: translateY(-4px);
+}
+
+.aspect-ratio-box {
+    width: 100%;
+    position: relative;
+    padding-top: 56.25%; 
+    background: #0b1220;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.demo-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 83%;
+    object-fit: cover;
+    background-color: #0b1220;
+}
+
+/* ==========================================
+   THE TOGGLE BUTTON DESIGN REGULATION
+   ========================================== */
+.side-dropdown-btn {
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    
+    background: #0f172a;
+    border: 1px solid rgba(153, 255, 51, 0.3);
+    color: #99ff33;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.arrow-icon {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+}
+
+.side-dropdown-btn:hover {
+    background: #99ff33;
+    color: #05070a;
+    border-color: #99ff33;
+    box-shadow: 0 0 15px rgba(153, 255, 51, 0.4);
+}
+
+.project-card.expanded .side-dropdown-btn .arrow-icon {
+    transform: rotate(90deg);
+}
+
+.project-card.expanded .side-dropdown-btn {
+    right: 15px; 
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.project-header h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0;
+    color: #ffffff;
+    line-height: 1.4;
+    letter-spacing: -0.3px;
+    padding-right: 10px;
+}
+
+.project-date {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.project-body {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.tech-desc {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #cbd5e1 !important;
+    text-align: left;
+}
+
+.project-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.project-tech-tags span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #99ff33;
+    background: rgba(153, 255, 51, 0.06);
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(153, 255, 51, 0.1);
+}
+
+/* ==========================================
+   CONTACT SECTION LAYOUT
+   ========================================== */
+.page-content.contact-layout {
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+}
+
+.contact-sub {
+    font-size: 1.2rem;
+    color: #94a3b8 !important;
+    margin-bottom: 30px !important;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.contact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 18px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.contact-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+}
+
+.contact-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.contact-item:hover {
+    background: rgba(153, 255, 51, 0.03);
+    border-color: rgba(153, 255, 51, 0.3);
+    transform: scale(1.02);
+}
+
+.contact-item:hover .contact-value {
+    color: #99ff33;
+    text-shadow: 0 0 10px rgba(153, 255, 51, 0.3);
+}
+
+/* ==========================================
+   BADGE CONTAINER GRID
+   ========================================== */
+.badge-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    gap: 30px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.certificate-badge {
+    width: 280px;           
+    height: 160px;          
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(3, 5, 10, 0.8) 100%);
+    border: 2px dashed rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    display: flex;          
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.badge-img {
+    max-height: 120px;      
+    max-width: 100%;
+    object-fit: contain;    
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================
+   PAGE 1 TWO-COLUMN SPLIT ROW LAYOUT
+   ========================================== */
+.page-content.align-split-row {
+    display: flex;
+    flex-direction: row;       
+    justify-content: space-between; 
+    align-items: center;       
+    width: 100%;
+    max-width: 1200px;
+    gap: 90px;                 
+}
+
+.intro-text-column {
+    flex: 1.2;                 
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.intro-animation-column {
+    flex: 0.8;                 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 768px) {
+    .page-content.align-split-row {
+        flex-direction: column; 
+        text-align: center;
+    }
+    lottie-player {
+        max-width: 300px;      
+    }
+}
+
+.project-header a{
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    gap:10px;
+    text-decoration: none;
+
+}
+
+.project-header span, 
+.project-header a {
+  display: block;
+  text-align: right; /* Aligns the stacked text cleanly to the right */
+  margin-bottom: 5px; /* Adds space between the text lines */
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  
+}
+
+.skills-grid{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    width:auto;
+    gap: 10px;
+    margin-bottom: 10px;
+
+}
+
+.skills-category{
+    display:block;
+    background-color: #0f172a;
+    padding:10px;
+    height: 280px;
+    box-shadow: #05070a;
+    border-radius: 10px ;
+    border-color: #99ff33;
+    border: 0px solid #99ff33;
+    border-width: 1px;
+    margin: 3px;
+    opacity: 0.4;
+    font-weight: 800;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    transition: all 0.3s ease;
+    width: 200px;
+    
+    transform: translateY(15px);
+}
+.skills-category p{
+    padding:6px;
+    
+}
+
+.page-content h1{
+    transform: translateY(27px);
+}
+
+.skills-category:hover{
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(153, 255, 51, 0.3);
+    border-color: #99ff33;
+    border-width: 1px;
+    border-style: solid;
+
+}
+
+.badge-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    gap: 30px;
+    width: 100%;
+    margin-top: 30px;
+    transform: translateY(-15px);
+}
+
+.certificate-badge {
+    width: 280px;           
+    height: 160px;          
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(3, 5, 10, 0.8) 100%);
+    border: 2px dashed rgba(148, 163, 184, 0.2);
+}
+
+
+
+/*responsive */
+
+/* ==========================================
+   9. MOBILE RESPONSIVE ADAPTATIONS (max-width: 768px)
+   ========================================== */
+@media (max-width: 768px) {
+    /* Allow pages to grow dynamically based on contents on small screens */
+    html, body {
+        overflow-y: auto !important;
+        height: auto !important;
+    }
+    
+    .scroll-container {
+        height: auto !important;
+        overflow-y: visible !important;
+        scroll-snap-type: none !important; /* Disable strict snapping for easier scrolling */
+    }
+
+    .page {
+        height: auto !important;
+        min-height: 100vh;
+        width: 100vw;
+        padding: 80px 20px 40px 20px !important; /* Spacing for fixed navbar */
+        scroll-snap-align: none !important;
+        display: block !important; /* Fall back from rigid flexing */
+    }
+
+    /* Navbar tuning */
+    .navbar {
+        gap: 10px;
+        padding: 12px 10px;
+        justify-content: space-around;
+    }
+
+    .navbar a {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        flex: 1;
+    }
+
+    /* Page Content wrapper configurations */
+    .page-content,
+    .page-content.align-left-center,
+    .page-content.wide-layout,
+    .page-content.contact-layout {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        margin-top: 0 !important;
+        align-items: center !important;
+        text-align: center;
+    }
+
+    /* Typography scale downs */
+    .giant-heading {
+        font-size: 2.8rem !important;
+        letter-spacing: -1px;
+        margin-bottom: 15px !important;
+    }
+
+    .bio-text h2 {
+        font-size: 1.6rem !important;
+    }
+
+    .bio-text h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .highlight {
+        font-size: 1.1rem !important;
+        margin-top: 10px;
+    }
+
+    /* Skills layout restructuring */
+    .skills-grid {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 15px !important;
+    }
+
+    .skills-category {
+        width: 100% !important;
+        height: auto !important;
+        opacity: 1 !important; /* Always visible on mobile instead of relying on hover */
+        transform: none !important;
+        box-sizing: border-box;
+    }
+
+    /* Badge Grid tuning */
+    .badge-container {
+        flex-direction: column !important;
+        align-items: center;
+        gap: 15px !important;
+        transform: none !important;
+        margin-top: 25px;
+    }
+
+    .certificate-badge {
+        width: 100% !important;
+        max-width: 280px;
+    }
+
+    /* Projects Section Overhaul */
+    .projects-container {
+        flex-direction: column !important;
+        height: auto !important;
+        gap: 20px !important;
+        align-items: center !important;
+    }
+
+    .project-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        flex-direction: column !important;
+        padding: 20px !important;
+        transform: none !important;
+        background: #0b1220 !important; /* Default to visible color scheme */
+    }
+
+    /* Disable desktop side-slide layout adjustments on mobile */
+    .project-card.expanded,
+    .project-card:hover {
+        width: 100% !important;
+        transform: none !important;
+    }
+
+    .project-card.goes-behind {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .project-info-side {
+        width: 100% !important;
+    }
+
+    /* Make image/demo slot visible beneath the card body directly */
+    .project-demo-side, 
+    .project-card.expanded .project-demo-side {
+        width: 100% !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin-top: 15px;
+    }
+
+    /* Hide the desktop toggling button element since cards are fully unrolled */
+    .side-dropdown-btn {
+        display: none !important;
+    }
+
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .project-header h3 {
+        text-align: left;
+    }
+
+    .proj-btn {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .project-header span, 
+    .project-header a {
+        margin-bottom: 0;
+    }
+
+    /* Contact Links block adjustments */
+    .contact-links {
+        max-width: 100% !important;
+    }
+
+    .contact-item {
+        padding: 14px 18px !important;
+    }
+
+    .contact-value {
+        font-size: 0.95rem !important;
+    }
+}
+
+/* ==========================================
+   RESUME BUTTON HIGHLIGHT STYLING
+   ========================================== */
+.contact-item.resume-btn {
+    background: rgba(153, 255, 51, 0.05);
+    border: 1px solid rgba(153, 255, 51, 0.3);
+    box-shadow: 0 4px 20px rgba(153, 255, 51, 0.05);
+}
+
+.contact-item.resume-btn:hover {
+    background: rgba(153, 255, 51, 0.1) !important;
+    border-color: #99ff33 !important;
+    box-shadow: 0 0 25px rgba(153, 255, 51, 0.25) !important;
+    transform: scale(1.03);
+}
