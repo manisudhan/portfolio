@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script>document.documentElement.classList.add('js-anim')</script>
     <title>Manisudhan | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,10 +11,101 @@
     <link rel="stylesheet" href="style.css">
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script></head>
 <body>
+   <video id="bgVideo" muted playsinline preload="auto" class="bg-video">
+       <source src="videback-scrub.mp4" type="video/mp4">
+   </video>
 
-    <video autoplay muted loop playsinline preload="auto" class="bg-video">
-    <source src="background.mp4" type="video/mp4">
-</video>
+<script>document.addEventListener("DOMContentLoaded", () => {
+    const video = document.getElementById("bgVideo");
+    if (!video) return;
+
+    const scroller = document.querySelector(".scroll-container");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Scrubbing needs a silent, inline, preloaded video that never plays on its own
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.pause();
+
+    if (prefersReducedMotion) return; // leave the first frame as a still background
+
+    // Tuning
+    const TAU = 0.05;      // seconds. Lower = tighter sync, higher = softer glide
+    const FRAME = 1 / 60;  // ignore changes smaller than this (seconds of video)
+    const SNAP = 0.0008;   // when this close to the target, jump straight onto it
+
+    let target = 0;        // scroll progress we want (0 to 1)
+    let current = 0;       // progress shown on screen, eased toward target
+    let lastSeek = -1;     // last time value written to the video
+    let lastNow = 0;
+    let rafId = null;
+
+    function readProgress() {
+        let top, max;
+        if (scroller && scroller.scrollHeight > scroller.clientHeight) {
+            top = scroller.scrollTop;
+            max = scroller.scrollHeight - scroller.clientHeight;
+        } else {
+            const doc = document.documentElement;
+            top = window.scrollY || doc.scrollTop;
+            max = doc.scrollHeight - window.innerHeight;
+        }
+        target = max > 0 ? Math.min(Math.max(top / max, 0), 1) : 0;
+    }
+
+    function tick(now) {
+        rafId = null;
+        if (!video.duration) return;
+
+        // time-based easing, so it feels the same at 60Hz, 120Hz or on a slow frame
+        const dt = lastNow ? Math.min((now - lastNow) / 1000, 0.064) : 1 / 60;
+        lastNow = now;
+        const alpha = 1 - Math.exp(-dt / TAU);
+
+        current += (target - current) * alpha;
+        if (Math.abs(target - current) < SNAP) current = target;
+
+        // stay just inside the clip so the last frame never triggers "ended"
+        const t = Math.min(current * video.duration, video.duration - 0.001);
+
+        // never queue a seek while one is still running
+        if (!video.seeking && Math.abs(t - lastSeek) >= FRAME) {
+            video.currentTime = t;
+            lastSeek = t;
+        }
+
+        const settled = current === target && Math.abs(t - lastSeek) < FRAME;
+        if (!settled) {
+            rafId = requestAnimationFrame(tick);
+        } else {
+            lastNow = 0;
+        }
+    }
+
+    function onScroll() {
+        readProgress();
+        if (rafId === null) rafId = requestAnimationFrame(tick);
+    }
+
+    function init() {
+        readProgress();
+        current = target;
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        if (scroller) scroller.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll, { passive: true });
+    }
+
+    if (video.readyState >= 1) {
+        init();
+    } else {
+        video.addEventListener("loadedmetadata", init, { once: true });
+    }
+});
+</script>
+
+
     <nav class="navbar">
         <a href="#page1">About</a>
         <a href="#page2">Skills</a>
@@ -36,76 +128,76 @@
                 </div>
 
                 <div class="intro-animation-column">
-                    <lottie-player 
-                        src="Backend Icon.json" 
-                        background="transparent" 
-                        speed="1" 
-                        loop 
-                        autoplay>
-                    </lottie-player>
-                </div>
+    <img src="iimage.webp" alt="Manisudhan" style="width: 350px; height: 500px; object-fit: cover;">
+</div>   
 
             </div>
         </section>
 
-        <section id="page2" class="page">
-            <div class="page-content">
-                <h1 class="giant-heading">Skills & Credentials</h1>
-                
-                <div class="skills-grid">
-                    <div class="skills-category">
-                        <h2>Languages</h2>
-                        <p>Java </p>
-                        <p>Python</p>  
-                        <p>Node.js (JavaScript)</p>
-                        <p>SQL</p> 
-                        <p>C++</p>  
-                        <p>HTML/CSS</p>
-                    </div>
-                    <div class="skills-category">
-                        <h2>Backend & Cloud</h2>
-                        <p>AWS (EC2, S3, ALB, VPC)</p>
-                        <p>Express.js</p>  
-                        <p>RESTful APIs</p>
-                    </div>
-                    <div class="skills-category">
-                        <h2>DevOps & Databases</h2>
-                        <p>Docker</p>
-<p>Linux/Bash</p>
-<p>Git</p>
-<p>GitHub Actions</p>
-<p>PostgreSQL</p>
-<p>Supabase</p>
-<p>MySQL</p>
+    <section id="page2" class="page">
+    <div class="page-content page2-layout">
+        <!-- Photo (left box of page 2). Change the file name in src to use another picture -->
+        <div class="page2-photo">
+            <img src="samurai.jpg" alt="Manisudhan" >
+        </div>
 
-                    </div>
-                    <div class="skills-category">
-                        <h2>Other skills</h2>
-<p>DSA</p>
-<p>OOPS</p>
-<p>Low level System design</p>
-<p>Agile framework</p>
-                    </div>
+        <!-- Clean vertical upright heading -->
+        <h1 class="giant-heading vertical-upright-heading">Skills</h1>
+        
+        <div class="page2-right-content">
+            <div class="skills-grid horizontal-skills">
+                <div class="skills-category">
+                    <h2>Languages</h2>
+                    <p>Java</p>
+                    <p>Python</p>  
+                    <p>Node.js (JavaScript)</p>
+                    <p>SQL</p> 
+                    <p>C++</p>  
+                    <p>HTML/CSS</p>
                 </div>
+                <div class="skills-category">
+                    <h2>Backend & Cloud</h2>
+                    <p>AWS (EC2, S3, ALB, VPC)</p>
+                    <p>Express.js</p>  
+                    <p>RESTful APIs</p>
+                </div>
+                <div class="skills-category">
+                    <h2>DevOps & Databases</h2>
+                    <p>Docker</p>
+                    <p>Linux/Bash</p>
+                    <p>Git</p>
+                    <p>GitHub Actions</p>
+                    <p>PostgreSQL</p>
+                    <p>Supabase</p>
+                    <p>MySQL</p>
+                </div>
+                <div class="skills-category">
+                    <h2>Other skills</h2>
+                    <p>DSA</p>
+                    <p>OOPS</p>
+                    <p>Low level System design</p>
+                    <p>Agile framework</p>
+                </div>
+            </div>
 
-    <div class="badge-container">
-    
-    <a href="https://www.credly.com/badges/6ed8263a-8884-4949-bc41-3a5e2350262b/public_url" 
-       target="_blank" 
-       class="certificate-badge aws-badge-link">
-        <img src="https://images.credly.com/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png" 
-             alt="AWS Certified Solutions Architect – Associate" 
-             class="badge-img">
-    </a>
+            <div class="badge-container">
+                <a href="https://www.credly.com/badges/6ed8263a-8884-4949-bc41-3a5e2350262b/public_url" 
+                   target="_blank" 
+                   class="certificate-badge aws-badge-link">
+                    <img src="https://images.credly.com/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png" 
+                         alt="AWS Certified Solutions Architect – Associate" 
+                         class="badge-img">
+                </a>
 
-    <div class="certificate-badge">
-        <img src="Screenshot 2026-07-02 235940.png" 
-             alt="Infosys Springboard Internship Certificate" 
-             class="badge-img">
+                <div class="certificate-badge">
+                    <img src="Screenshot 2026-07-02 235940.png" 
+                         alt="Infosys Springboard Internship Certificate" 
+                         class="badge-img">
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-            </div>
-        </section>
+</section>
 
 <section id="page3" class="page">
     <div class="page-content wide-layout">
@@ -266,8 +358,8 @@ function toggleStackDemo(button) {
         
         <div class="contact-links">
             <a href="Manisudhan (2).pdf" download="Manisudhan_Resume.pdf" class="contact-item resume-btn">
-                <span class="contact-label" style="color: #99ff33;">Resume</span>
-                <span class="contact-value" style="color: #99ff33;">Download PDF ↓</span>
+                <span class="contact-label" style="color: #ffffff;">Resume</span>
+                <span class="contact-value" style="color: #ffffff;">Download PDF ↓</span>
             </a>
             <div class="contact-item copyable" onclick="copyToClipboard('+918220002155', this)" title="Click to copy phone number">
                 <span class="contact-label">Phone</span>
@@ -288,6 +380,14 @@ function toggleStackDemo(button) {
                 <span class="contact-value">linkedin.com/in/manisudhan</span>
             </a>
         </div>
+        <div class="image-container-hand hand-left">
+    <img src="connectleft.png" alt="Description of your image">
+
+</div>
+
+   <div class="image-container-hand hand-right">
+    <img src="connectright.png" alt="Description of your image">
+</div>
     </div>
 </section>
 
@@ -301,7 +401,7 @@ function copyToClipboard(text, element) {
         
         // 3. Update text styling to show instant confirmation feedback
         label.innerText = 'Copied!';
-        label.style.color = '#99ff33';
+        label.style.color = '';
         
         // 4. Smoothly revert back to original label state after 2 seconds
         setTimeout(() => {
@@ -313,6 +413,7 @@ function copyToClipboard(text, element) {
     });
 }
 </script>
+<script src="reveal.js"></script>
 
     </main>
 
