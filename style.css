@@ -1,4 +1,14 @@
 /* ==========================================
+   0. SHARED COLOURS
+   Every piece of text on the site resolves to one of these two.
+   Change them here and the whole site follows.
+   ========================================== */
+:root {
+    --ink: #ffffff;        /* all body text   */
+    --ink-soft: #ffffff;   /* supporting text */
+}
+
+/* ==========================================
    1. SYSTEM RESET & TRANSPARENT ROOT LAYER
    ========================================== */
 html, body {
@@ -44,7 +54,9 @@ body::before {
     pointer-events: none; 
 }
 
-/* LAYER 3 (OPTIONAL TINT): Darkens the video slightly so text is readable */
+/* LAYER 3 (GREY VEIL): a neutral grey over the video, so white text reads
+   against it. Raise the last number for a darker grey, lower it for lighter.
+   It is a plain grey on purpose, so no blue or purple creeps back in. */
 body::after {
     content: "";
     position: fixed;
@@ -52,7 +64,7 @@ body::after {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(55, 52, 124, 0.4); /* 40% dark overlay layer tint */
+    background: rgba(38, 38, 42, 0.62);
     z-index: -1;                     /* Sits directly on top of the video player */
     pointer-events: none;
 }
@@ -85,15 +97,16 @@ body::after {
     justify-content: center;
     gap: 40px;
     padding: 10px 0;
-    background: rgba(52, 72, 111, 0.7);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(153, 255, 51, 0.08);
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar a {
-    color: #94a3b8; /* Slate gray by default */
+    color: #ffffff;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 800;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -104,8 +117,8 @@ body::after {
 }
 
 .navbar a:hover {
-    color: #060606; /* Neon highlight */
-    text-shadow: 0 0 12px rgba(181, 181, 181, 0.5);
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.85);
     transform: translateY(2px);
 }
 
@@ -159,9 +172,10 @@ body::after {
    5. TYPOGRAPHIC HIERARCHY (BIG vs small)
    ========================================== */
 .giant-heading {
+    font-family: 'Kanit', 'Inter', sans-serif;
     font-size: 5.5rem;
-    font-weight: 900;
-    letter-spacing: -3px;
+    font-weight: 800;
+    letter-spacing: -1px;
     color: #ffffff;
     text-shadow: 0 0 40px rgba(251, 251, 251, 0.2);
     margin: 0;
@@ -176,31 +190,25 @@ body::after {
 }
 
 .bio-text h2 {
+    font-family: 'Kanit', 'Inter', sans-serif;
     font-size: 2.2rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -0.5px;
     margin: 0;
-    color: #ffffff;
-
-    /* Black border using text-shadow */
-    text-shadow: 
-        -1px -1px 0 #000,  
-         1px -1px 0 #000,
-        -1px  1px 0 #000,
-         1px  1px 0 #000;
+    color: var(--ink);
 }
 
 .bio-text h3 {
     font-size: 1.25rem;
-    font-weight: 400;
-    color: #ffffff;
+    font-weight: 700;
+    color: var(--ink);
     margin: 0;
 }
 
 .highlight {
     font-size: 1.4rem;
-    font-weight: 600;
-    color: #fcfcfc;
+    font-weight: 800;
+    color: var(--ink);
     margin-top: 15px;
     max-width: 700px;
     line-height: 1.4;
@@ -208,7 +216,8 @@ body::after {
 
 p {
     font-size: 1.1rem;
-    color: #cececf;
+    font-weight: 600;
+    color: #ffffff;
     margin: 0;
 }
 
@@ -222,77 +231,161 @@ p {
     justify-content: center;
 }
 
+/* A row of equal cards. Opening one lets it grow and the rest shrink,
+   driven entirely by flex-grow, so it holds up with any number of cards
+   at any width. */
 .projects-container {
     display: flex;
     position: relative;
     width: 100%;
-    height: 400px;
-    margin-top: 20px;
+    margin-top: 10px;
     align-items: stretch;
-    overflow: visible !important; 
-    gap: 15px;
-    justify-content: center;
+    gap: 18px;
+    justify-content: flex-start;
+
+    /* cards keep a readable width, so the row runs off the edge and scrolls */
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px;
+    overscroll-behavior-x: contain;
+
+    /* the row drives itself, so the scrollbar strip is just clutter */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
+.projects-container::-webkit-scrollbar { display: none; }
+
 .project-card {
-    width: 270px; 
-    background: oklch(18.312% 0.03092 263.398) !important; 
-    border: 1px solid rgba(180, 180, 180, 0.1);
-    border-radius: 12px;
-    padding: 25px;
+    flex: 0 0 clamp(286px, 24vw, 340px);
+    min-width: 0;
+    min-height: clamp(360px, 52vh, 440px);
+    background: #0d1117 !important;
+    border: 1px solid rgba(180, 180, 180, 0.12);
+    border-radius: 14px;
+    padding: 22px;
+    padding-right: 34px;
     display: flex;
-    flex-direction: row; 
-    gap: 0px;
+    flex-direction: row;
+    gap: 0;
     position: relative;
-    overflow: visible; 
-    padding-right: 60px;
+    overflow: hidden;
     z-index: 5;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1),
-                width 0.5s cubic-bezier(0.25, 1, 0.3, 1),
-                border-color 0.3s ease, 
+    transition: flex-basis 0.55s cubic-bezier(0.25, 1, 0.3, 1),
+                opacity 0.35s ease,
+                border-color 0.3s ease,
                 background-color 0.3s ease,
                 box-shadow 0.4s ease;
 }
 
 .project-card.expanded {
-    background: #0b1220 !important; 
+    flex-basis: min(840px, 76vw);
+    min-height: 0;
+    background: #0b1220 !important;
     border-color: rgba(233, 233, 233, 0.4);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-    z-index: 40; 
-    width: 960px;
+    z-index: 40;
 }
 
-.project-card.goes-behind {
-    z-index: 1 !important; 
-    pointer-events: none;  
-    opacity: 0.35;         
+/* the ones that stay shut step back a little */
+.projects-container.has-expanded .project-card:not(.expanded) {
+    opacity: 0.55;
 }
 
 .project-info-side {
-    width: 295px; 
-    flex-shrink: 0; 
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 10px;
+    transition: flex-basis 0.55s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+.project-card.expanded .project-info-side {
+    flex: 0 0 clamp(240px, 22vw, 320px);
 }
 
 .project-demo-side {
-    width: 0px;
+    flex: 0 1 0;
+    min-width: 0;
+    padding-left: 0;
     opacity: 0;
-    visibility: hidden;
-    flex-shrink: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: width 0.5s ease, opacity 0.3s ease, visibility 0.5s ease;
-    background-color: #5b5d60;
+    transition: flex-grow 0.55s cubic-bezier(0.25, 1, 0.3, 1),
+                padding-left 0.55s cubic-bezier(0.25, 1, 0.3, 1),
+                opacity 0.3s ease;
 }
 
 .project-card.expanded .project-demo-side {
-    width: 545px; 
+    flex-grow: 1.3;
+    padding-left: 20px;
     opacity: 1;
-    visibility: visible;
-    background-color: #0b1220;
+}
+
+.project-card.expanded .tech-desc {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+
+/* While a card is shut its demo panel is only a few pixels wide, so anything
+   left in flow inside it wraps to one character per line and stretches the
+   whole row. Taking the contents out of flow until the card opens is what
+   keeps all four cards the same sensible height. */
+.project-demo-side > * { display: none; width: 100%; min-width: 0; }
+.project-card.expanded .project-demo-side > * { display: block; }
+
+.project-demo-side { flex-direction: column; gap: 10px; }
+
+/* the diagram keeps its own shape rather than the 16:9 of a screenshot,
+   so nothing at the top or bottom of the flow gets cropped away */
+/* The box is sized from its height and keeps the diagram's own proportions,
+   so nothing is letterboxed and nothing is cropped. Height is capped, since
+   the diagram is taller than it is wide and would otherwise push the open
+   card past the bottom of the slide. */
+.aspect-ratio-box.diagram-box {
+    padding-top: 0;          /* beats the 56.25% spacer the photo boxes use */
+    height: min(52vh, 400px);
+    width: auto;
+    max-width: 100%;
+    aspect-ratio: 1080 / 940;
+    align-self: center;
+    flex: 0 0 auto;
+    background: #111111;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* two classes on purpose: .demo-img is defined further down the file and
+   would otherwise win on source order and crop the diagram */
+.demo-img.demo-diagram {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #111111;
+}
+
+.demo-caption {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.demo-placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
 }
 
 .project-card:hover {
@@ -328,7 +421,7 @@ p {
    ========================================== */
 .side-dropdown-btn {
     position: absolute;
-    right: -16px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
     
@@ -372,14 +465,23 @@ p {
 
 .project-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 15px;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
+    gap: 11px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
+    padding-bottom: 14px;
+}
+
+/* year and link sit side by side under the title, not stacked beside it */
+.proj-btn {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }
 
 .project-header h3 {
+    font-family: 'Kanit', 'Inter', sans-serif;
     font-size: 1.25rem;
     font-weight: 800;
     margin: 0;
@@ -391,8 +493,8 @@ p {
 
 .project-date {
     font-size: 0.8rem;
-    font-weight: 600;
-    color: #94a3b8;
+    font-weight: 800;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.05);
     padding: 4px 8px;
     border-radius: 4px;
@@ -404,9 +506,14 @@ p {
 }
 
 .tech-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
+    overflow: hidden;
     font-size: 0.92rem;
-    line-height: 1.6;
-    color: #cbd5e1 !important;
+    font-weight: 600;
+    line-height: 1.55;
+    color: #ffffff !important;
     text-align: left;
 }
 
@@ -419,10 +526,10 @@ p {
 
 .project-tech-tags span {
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #f1f1f1;
+    color: #ffffff;
     background: rgba(153, 255, 51, 0.06);
     padding: 5px 10px;
     border-radius: 4px;
@@ -440,7 +547,8 @@ p {
 
 .contact-sub {
     font-size: 1.2rem;
-    color: #edeeee !important;
+    font-weight: 700;
+    color: var(--ink) !important;
     margin-bottom: 30px !important;
 }
 
@@ -469,13 +577,13 @@ p {
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #ffffff;
+    color: var(--ink);
 }
 
 .contact-value {
     font-size: 1.05rem;
     font-weight: 900;
-    color: #ffffff;
+    color: var(--ink);
     transition: color 0.3s ease;
 }
 
@@ -486,8 +594,8 @@ p {
 }
 
 .contact-item:hover .contact-value {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(54, 51, 255, 0.3);
+    color: var(--ink);
+    text-shadow: 0 0 10px rgba(54, 51, 255, 0.2);
 }
 
 /* ==========================================
@@ -564,7 +672,7 @@ p {
 .project-header a{
     font-size: 0.8rem;
     font-weight: 600;
-    color: #94a3b8;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.05);
     padding: 4px 8px;
     border-radius: 4px;
@@ -573,14 +681,14 @@ p {
 
 }
 
-.project-header span, 
+.project-header span,
 .project-header a {
-  display: block;
-  text-align: right; /* Aligns the stacked text cleanly to the right */
-  margin-bottom: 5px; /* Adds space between the text lines */
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 0;
   font-size: 0.8rem;
-  font-weight: 600;
-  color: #94a3b8;
+  font-weight: 800;
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.05);
   padding: 4px 8px;
   border-radius: 4px;
@@ -617,14 +725,11 @@ p {
     margin: 0 !important;
     flex-shrink: 0;
     text-transform: uppercase;
-    transform: translateY(-100px);
-    
-    padding-top: 14px;
-    padding-bottom: 72px;
-    background-color: rgba(52, 72, 111, 0.7);
-    padding-right: 7px;
-    padding-left: 7px;
-    margin-left: 2800px;
+    padding: 14px 7px;
+    border-radius: 16px;
+    background-color: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
 }
 
 .page2-right-content {
@@ -656,7 +761,7 @@ p {
     -webkit-backdrop-filter: blur(16px);
     
     /* Subtle glossy borders & reflections */
-    border: 1px solid rgba(228, 227, 227, 0.15);
+    border: 1px solid rgba(39, 38, 38, 0.15);
     border-top: 1px solid rgba(251, 251, 251, 0.3); /* Brighter top edge for light reflection */
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     
@@ -800,47 +905,12 @@ p {
         max-width: 280px;
     }
 
-    /* Projects Section Overhaul */
+    /* Projects: cards unroll into a single column, demos always open */
     .projects-container {
         flex-direction: column !important;
-        height: auto !important;
-        gap: 20px !important;
+        min-height: 0 !important;
+        gap: 18px !important;
         align-items: center !important;
-    }
-
-    .project-card {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box;
-        flex-direction: column !important;
-        padding: 20px !important;
-        transform: none !important;
-        background: #0b1220 !important; /* Default to visible color scheme */
-    }
-
-    /* Disable desktop side-slide layout adjustments on mobile */
-    .project-card.expanded,
-    .project-card:hover {
-        width: 100% !important;
-        transform: none !important;
-    }
-
-    .project-card.goes-behind {
-        opacity: 1 !important;
-        pointer-events: auto !important;
-    }
-
-    .project-info-side {
-        width: 100% !important;
-    }
-
-    /* Make image/demo slot visible beneath the card body directly */
-    .project-demo-side, 
-    .project-card.expanded .project-demo-side {
-        width: 100% !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        margin-top: 15px;
     }
 
     /* Hide the desktop toggling button element since cards are fully unrolled */
@@ -900,362 +970,363 @@ p {
 }
 
 
+
+
+
+/* ==========================================================
+   PROJECTS — FITTING FOUR CARDS ON ONE SLIDE
+   ========================================================== */
+#page3 .giant-heading {
+    font-size: clamp(2.1rem, 4.4vw, 3.5rem);
+    margin-bottom: 4px;
+}
+
+#page3 .projects-container { margin-top: 10px; }
+
+#page3 .project-header h3 { font-size: 1rem; line-height: 1.3; }
+#page3 .project-header { margin-bottom: 10px; padding-bottom: 10px; }
+#page3 .project-body { margin-bottom: 12px; }
+
+#page3 .project-tech-tags span {
+    font-size: 0.66rem;
+    padding: 3px 7px;
+    letter-spacing: 0.04em;
+}
+
+#page3 .tech-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    -webkit-line-clamp: 8;
+}
+
+#page3 .project-card.expanded .tech-desc {
+    font-size: 0.9rem;
+    -webkit-line-clamp: unset;
+}
+
+/* ==========================================================
+   PROJECTS — STACKED LAYOUT
+   Four cards side by side need real width. Below 1100px they unroll into
+   a single column with every demo already open, and the toggle is hidden.
+   ========================================================== */
+@media (max-width: 1200px) {
+    .projects-container {
+        flex-direction: column;
+        min-height: 0;
+        gap: 18px;
+        align-items: center;
+    }
+
+    .project-card,
+    .project-card.expanded,
+    .projects-container.has-expanded .project-card:not(.expanded) {
+        flex: 0 0 auto;
+        flex-direction: column;
+        width: 100%;
+        max-width: 760px;
+        box-sizing: border-box;
+        opacity: 1;
+        padding-right: 22px;
+    }
+
+    .project-card { min-height: 0; }
+
+    .project-card.expanded .project-info-side { flex: 0 0 auto; }
+
+    .project-demo-side,
+    .project-card.expanded .project-demo-side {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 560px;
+        padding-left: 0;
+        margin-top: 14px;
+        opacity: 1;
+        overflow: visible;
+    }
+
+    .tech-desc,
+    .project-card.expanded .tech-desc {
+        -webkit-line-clamp: unset;
+        overflow: visible;
+    }
+
+    .project-demo-side > * { display: block; }
+
+    /* stacked: the diagram takes the full width and its height follows */
+    .aspect-ratio-box.diagram-box {
+        width: 100%;
+        height: auto;
+    }
+
+    .side-dropdown-btn { display: none; }
+}
+
 /* ==========================================
-   10. PAGE CHOREOGRAPHY
-   Leaving:  the page stays in place and its elements pop out.
-   Arriving: the next page's elements animate in, in four beats:
-     1. Heading letters rise in
-     2. A light rule draws under the heading
-     3. The main content arrives, staggered
-     4. Details inside each element settle, glass cards get one light sweep
-   reveal.js adds .is-visible while a page is showing and .is-leaving while it
-   is moving away, so the sequence replays on every visit.
-   Tune any page with --d (text delay), --base (first item delay),
-   --step (gap between items), --x / --y (travel) and --rot / --s (tilt, scale).
+   PAGE 1 — INTRO POINTS AND STATS
+   ========================================== */
+.intro-points {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    max-width: 44ch;
+}
+
+.intro-points li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--ink);
+}
+
+.intro-points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.52em;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.intro-points strong { font-weight: 800; }
+
+.intro-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.stat strong {
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+}
+
+.stat span {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* the intro column needs room now that it carries more */
+.intro-text-column { gap: 22px !important; }
+
+@media (max-width: 768px) {
+    .intro-points { align-items: flex-start; text-align: left; margin-inline: auto; }
+    .intro-stats { justify-content: center; }
+    .stat { padding: 8px 13px; }
+    .stat strong { font-size: 1.25rem; }
+}
+
+/* ==========================================
+   10. SLIDE CHOREOGRAPHY
+   Every page is a slide and arrives as ONE solid block: the whole content
+   panel moves into place together and settles. Nothing inside flies in from
+   its own direction any more — a dozen elements each taking their own path
+   is what made scrolling feel restless.
+
+   reveal.js adds .is-visible while a slide is on screen and .is-leaving
+   while it moves away, so the move replays on every visit.
    ========================================== */
 :root {
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-exit: cubic-bezier(0.25, 0.6, 0.4, 1);
+    --ease-slide: cubic-bezier(0.22, 1, 0.36, 1);   /* firm, no overshoot */
+    --ease-exit:  cubic-bezier(0.4, 0, 0.7, 1);
+    --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);    /* still used by hovers */
+    --slide-in:  0.72s;
+    --slide-out: 0.32s;
 }
 
-/* Sideways slides must never create a horizontal scrollbar */
+/* One slide per flick, and never a sideways scrollbar */
 .scroll-container {
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
-/* ---------- Navbar: bar drops in, then the links follow one by one ---------- */
+.page {
+    scroll-snap-stop: always;
+}
+
+/* ---------- Navbar drops in once, on load ---------- */
 .navbar {
-    animation: navDrop 0.9s var(--ease-out) 0.1s backwards;
+    animation: navDrop 0.7s var(--ease-slide) 0.05s backwards;
 }
-
-.navbar a {
-    animation: navLink 0.8s var(--ease-out) calc(0.4s + var(--i, 0) * 0.08s) backwards;
-}
-
-.navbar a:nth-child(1) { --i: 0; }
-.navbar a:nth-child(2) { --i: 1; }
-.navbar a:nth-child(3) { --i: 2; }
-.navbar a:nth-child(4) { --i: 3; }
-.navbar a:nth-child(5) { --i: 4; }
 
 @keyframes navDrop {
     from { opacity: 0; translate: 0 -100%; }
 }
 
-@keyframes navLink {
-    from { opacity: 0; translate: 0 -14px; }
+/* ---------- The slide move ---------- */
+.js-anim .page .page-content {
+    will-change: transform, opacity;
 }
 
-/* ---------- Keep each page's content fixed on screen while pages scroll past ----------
-   The page box still scrolls and snaps as before, but its content is shifted by
-   exactly the opposite amount, so it does not ride up the screen.
-   (Chrome, Edge and Safari 26+. Elsewhere the content simply scrolls normally.) */
-@supports (animation-timeline: view()) {
-    @media (min-width: 769px) {
-        .page {
-            view-timeline: --pg block;
-        }
-
-        .page-content {
-            animation: pagePin linear both;
-            animation-timeline: --pg;
-            animation-range: cover 0% cover 100%;
-        }
-    }
-}
-
-@keyframes pagePin {
-    from { translate: 0 -100vh; }
-    to   { translate: 0 100vh; }
-}
-
-/* ---------- Resting state before a page has been seen (JS only) ----------
-   visibility is used on purpose, so it never fights your hover transitions. */
-.js-anim .page:not(.is-visible):not(.is-leaving) :is(
-    .giant-heading, .vertical-upright-heading, .bio-text h2, .bio-text h3,
-    .highlight, .contact-sub,
-    .intro-animation-column, .skills-category, .certificate-badge,
-    .project-card, .contact-item
-) {
-    visibility: hidden;
-}
-
-.js-anim .page:not(.is-visible):not(.is-leaving) .project-demo-side {
-    visibility: hidden !important;
-}
-
-/* ---------- Beat 1: headings, letter by letter ---------- */
-.giant-heading {
-    position: relative;
-}
-
-.giant-heading .word {
-    display: inline-block;
-    white-space: nowrap;
-}
-
-.giant-heading .char {
-    display: inline-block;
-}
-
-.js-anim .page.is-visible .giant-heading .char {
-    animation: charIn 1s var(--ease-out) calc(var(--d, 0s) + var(--ci, 0) * 0.04s) backwards;
-}
-
-@keyframes charIn {
-    from {
-        opacity: 0;
-        translate: 0 0.5em;
-        rotate: 6deg;
-        scale: 0.9;
-        filter: blur(8px);
-    }
-}
-
-/* ---------- Beat 2: a light rule draws under each heading ---------- */
-.giant-heading:not(.vertical-upright-heading)::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -14px;
-    width: 96px;
-    height: 3px;
-    margin-inline: auto;
-    border-radius: 3px;
-    background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.15));
-    box-shadow: 0 0 18px rgba(255, 255, 255, 0.45);
-}
-
-#page1 .giant-heading::after {
-    margin-inline: 0;
-    transform-origin: left center;
-}
-
-.js-anim .page.is-visible .giant-heading:not(.vertical-upright-heading)::after {
-    animation: lineDraw 0.9s var(--ease-out) calc(var(--d, 0s) + var(--cn, 8) * 0.04s + 0.2s) backwards;
-}
-
-@keyframes lineDraw {
-    from { scale: 0 1; opacity: 0; }
-}
-
-/* Page 2's vertical heading slides down into place from above */
-.js-anim .page.is-visible .vertical-upright-heading {
-    animation: slideDown 1.1s var(--ease-out) var(--d, 0s) backwards;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; translate: 0 -260px; }
-}
-
-/* ---------- Beat 3: body text and blocks ---------- */
-.js-anim .page.is-visible :is(
-    .bio-text h2, .bio-text h3, .highlight, .contact-sub,
-    .giant-heading:not(.is-split):not(.vertical-upright-heading)
-) {
-    animation: revealBlur 1.1s var(--ease-out) var(--d, 0s) backwards;
-}
-
-.js-anim .page.is-visible :is(
-    .skills-category, .certificate-badge, .project-card, .contact-item,
-    .intro-animation-column
-) {
-    animation: revealIn 1.1s var(--ease-out)
-        calc(var(--base, 0s) + var(--i, 0) * var(--step, 0.1s)) backwards;
-}
-
-/* The keyframes only describe the starting point. The end is each element's
-   normal style, so hover effects and the card expand script keep working. */
-@keyframes revealIn {
-    from {
-        opacity: 0;
-        translate: var(--x, 0px) var(--y, 32px);
-        scale: var(--s, 1);
-        rotate: var(--rot, 0deg);
-    }
-}
-
-@keyframes revealBlur {
-    from {
-        opacity: 0;
-        translate: var(--x, 0px) var(--y, 32px);
-        filter: blur(var(--b, 8px));
-    }
-}
-
-/* Position of each item inside its group, used for the stagger */
-:is(.skills-category, .certificate-badge, .project-card, .contact-item):nth-child(1) { --i: 0; }
-:is(.skills-category, .certificate-badge, .project-card, .contact-item):nth-child(2) { --i: 1; }
-:is(.skills-category, .certificate-badge, .project-card, .contact-item):nth-child(3) { --i: 2; }
-:is(.skills-category, .certificate-badge, .project-card, .contact-item):nth-child(4) { --i: 3; }
-:is(.skills-category, .certificate-badge, .project-card, .contact-item):nth-child(5) { --i: 4; }
-:is(.skills-category, .certificate-badge, .project-card, .contact-item):nth-child(6) { --i: 5; }
-
-/* Perspective gives the card tilts real depth */
-.skills-grid,
-.projects-container {
-    perspective: 1400px;
-}
-
-/* ---------- Beat 4: the contents of each card settle after the card lands ---------- */
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(1) { --j: 0; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(2) { --j: 1; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(3) { --j: 2; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(4) { --j: 3; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(5) { --j: 4; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(6) { --j: 5; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(7) { --j: 6; }
-:is(.skills-category, .project-info-side, .contact-item) > :nth-child(8) { --j: 7; }
-
-.js-anim .page.is-visible .skills-category > * {
-    --x: 0px; --y: 16px; --s: 1; --rot: 0deg;
-    animation: revealIn 0.8s var(--ease-out)
-        calc(var(--base, 0s) + var(--i, 0) * var(--step, 0.1s) + 0.75s + var(--j, 0) * 0.06s) backwards;
-}
-
-.js-anim .page.is-visible .project-info-side > * {
-    --x: 0px; --y: 20px; --s: 1; --rot: 0deg;
-    animation: revealIn 0.8s var(--ease-out)
-        calc(var(--base, 0s) + var(--i, 0) * var(--step, 0.1s) + 0.5s + var(--j, 0) * 0.1s) backwards;
-}
-
-.js-anim .page.is-visible .contact-item > * {
-    --x: 0px; --y: 8px; --s: 1; --rot: 0deg;
-    animation: revealIn 0.7s var(--ease-out)
-        calc(var(--base, 0s) + var(--i, 0) * var(--step, 0.1s) + 0.3s + var(--j, 0) * 0.12s) backwards;
-}
-
-/* One soft light sweep across the glass pieces as they land */
-.skills-category,
-.certificate-badge,
-.contact-item {
-    position: relative;
-}
-
-.skills-category::before,
-.certificate-badge::before,
-.contact-item::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
+/* waiting its turn */
+.js-anim .page:not(.is-visible):not(.is-leaving) .page-content {
+    opacity: 0;
+    translate: 0 48px;
     pointer-events: none;
-    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.22) 50%, transparent 65%) no-repeat;
-    background-size: 300% 100%;
-    background-position: 100% 0;
 }
 
-.js-anim .page.is-visible :is(.skills-category, .certificate-badge, .contact-item)::before {
-    animation: shine 1.3s ease-in-out
-        calc(var(--base, 0s) + var(--i, 0) * var(--step, 0.1s) + 0.9s) backwards;
+.js-anim .page.is-visible .page-content {
+    animation: slideIn var(--slide-in) var(--ease-slide) both;
 }
 
-@keyframes shine {
-    from { background-position: 100% 0; }
-    to   { background-position: 0% 0; }
+.js-anim .page.is-leaving .page-content {
+    animation: slideOut var(--slide-out) var(--ease-exit) both;
 }
 
-/* ---------- Exit: the leaving page pops out before the next one arrives ---------- */
-.js-anim .page.is-leaving :is(
-    .bio-text h2, .bio-text h3, .highlight, .contact-sub,
-    .giant-heading, .vertical-upright-heading
-) {
-    animation: popOutText 0.22s var(--ease-exit) forwards;
+@keyframes slideIn {
+    from { opacity: 0; translate: 0 48px; }
+    to   { opacity: 1; translate: 0 0; }
 }
 
-.js-anim .page.is-leaving :is(
-    .skills-category, .certificate-badge, .project-card, .contact-item,
-    .intro-animation-column
-) {
-    animation: popOut 0.22s var(--ease-exit) calc(var(--i, 0) * 0.015s) forwards;
+@keyframes slideOut {
+    from { opacity: 1; translate: 0 0; }
+    to   { opacity: 0; translate: 0 -36px; }
 }
 
-@keyframes popOut {
-    to { opacity: 0; scale: 0.86; }
+
+/* ==========================================
+   PAGE 1 — AMBIENT MOTION
+   Slow, continuous and quiet. These loops never restart with the slide,
+   they just breathe underneath it.
+   ========================================== */
+
+/* Two soft lights drifting behind the intro */
+#page1 .page-content { position: relative; }
+
+#page1 .page-content::before,
+#page1 .page-content::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(60px);
 }
 
-@keyframes popOutText {
-    to { opacity: 0; scale: 0.92; translate: 0 -16px; filter: blur(10px); }
+#page1 .page-content::before {
+    width: 30rem;
+    height: 30rem;
+    top: -8rem;
+    left: -10rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%);
+    animation: driftA 26s ease-in-out infinite;
 }
 
-/* ---------- Page 1: text glides in from the left, the animation swings in from the right ---------- */
-#page1 .giant-heading            { --d: 0.1s; }
-#page1 .bio-text h2              { --x: -50px; --y: 0px; --b: 8px; --d: 0.50s; }
-#page1 .bio-text h3              { --x: -50px; --y: 0px; --b: 8px; --d: 0.62s; }
-#page1 .highlight                { --x: 0px;   --y: 26px; --d: 0.76s; }
-#page1 .intro-animation-column   { --x: 90px; --y: 0px; --s: 0.82; --rot: -8deg; --base: 0.3s; animation-duration: 1.4s; }
-
-/* ---------- Page 2: heading slides down, skill boxes slide in from the right and bounce back ---------- */
-#page2 .vertical-upright-heading { --d: 0.1s; }
-#page2 .skills-category          { --slide: 100vw; --base: 0.35s; --step: 0.1s; }
-#page2 .certificate-badge        { --y: 50px; --s: 0.88; --rot: -6deg; --base: 1.3s; --step: 0.14s; }
-#page2 .certificate-badge:nth-child(even) { --rot: 6deg; }
-
-.js-anim #page2.is-visible .skills-category {
-    animation: skillSlide 1.4s linear
-        calc(var(--base, 0s) + var(--i, 0) * var(--step, 0.1s)) backwards;
+#page1 .page-content::after {
+    width: 24rem;
+    height: 24rem;
+    bottom: -7rem;
+    right: -6rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.11), transparent 70%);
+    animation: driftB 34s ease-in-out infinite;
 }
 
-/* Right to left, overshoot past the resting spot, then settle back in a damped bounce */
-@keyframes skillSlide {
-    0%   { opacity: 0; translate: var(--slide, 100vw) 0; animation-timing-function: cubic-bezier(0.16, 0.84, 0.3, 1); }
-    15%  { opacity: 1; }
-    55%  { translate: -38px 0; animation-timing-function: ease-in-out; }
-    78%  { translate: 14px 0;  animation-timing-function: ease-in-out; }
-    92%  { translate: -5px 0;  animation-timing-function: ease-out; }
-    100% { translate: 0 0; }
+@keyframes driftA {
+    0%, 100% { translate: 0 0;        scale: 1; }
+    50%      { translate: 70px 50px;  scale: 1.14; }
 }
 
-/* ---------- Page 3: the three cards start stacked in the middle and fan out ---------- */
-#page3 .giant-heading            { --d: 0.1s; }
-#page3 .project-card             { --y: 70px; --s: 0.9; --base: 0.45s; --step: 0.12s; animation-duration: 1.3s; }
-#page3 .project-card:nth-child(1) { --x: 285px;  --rot: 0 1 0 28deg; }
-#page3 .project-card:nth-child(2) { --x: 0px;    --rot: 1 0 0 -18deg; }
-#page3 .project-card:nth-child(3) { --x: -285px; --rot: 0 1 0 -28deg; }
-
-/* ---------- Page 4: contact rows slide in from alternating sides ---------- */
-#page4 .giant-heading            { --d: 0.1s; }
-#page4 .contact-sub              { --y: 20px; --b: 5px; --d: 0.6s; }
-#page4 .contact-item             { --x: -90px; --y: 0px; --base: 0.75s; --step: 0.1s; }
-#page4 .contact-item:nth-child(even) { --x: 90px; }
-#page4 .contact-item.resume-btn  { --x: 0px; --y: 36px; --s: 0.88; }
-
-/* ---------- Phones: vertical movement only, so nothing pushes the page sideways ---------- */
-@media (max-width: 768px) {
-    html, body {
-        overflow-x: hidden;
-    }
-
-    .page * {
-        --x: 0px !important;
-        --y: 30px !important;
-    }
-
-    #page2 .skills-category {
-        --slide: 40vw;
-    }
-
-    #page1 .giant-heading::after {
-        margin-inline: auto;
-        transform-origin: center;
-    }
+@keyframes driftB {
+    0%, 100% { translate: 0 0;         scale: 1.08; }
+    50%      { translate: -60px -45px; scale: 0.94; }
 }
 
-/* ---------- Reduced motion: show everything, no movement ---------- */
+/* The portrait floats, with a glow breathing behind it */
+.intro-animation-column {
+    position: relative;
+    animation: float 9s ease-in-out infinite;
+}
+
+.intro-animation-column::before {
+    content: "";
+    position: absolute;
+    inset: -14px;
+    z-index: -1;
+    border-radius: 24px;
+    background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.3), transparent 72%);
+    filter: blur(26px);
+    animation: breathe 11s ease-in-out infinite;
+}
+
+.intro-animation-column img {
+    border-radius: 14px;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
+}
+
+@keyframes float {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -12px; }
+}
+
+@keyframes breathe {
+    0%, 100% { opacity: 0.45; scale: 1; }
+    50%      { opacity: 0.85; scale: 1.06; }
+}
+
+/* The heading glows very slowly, like a light turning over */
+#page1 .giant-heading {
+    animation: headingGlow 8s ease-in-out infinite;
+}
+
+@keyframes headingGlow {
+    0%, 100% { text-shadow: 0 0 34px rgba(255, 255, 255, 0.16); }
+    50%      { text-shadow: 0 0 54px rgba(255, 255, 255, 0.42); }
+}
+
+/* The accent rule under the heading pulses very gently */
+#page1 .giant-heading::after {
+    animation: ruleGlow 7s ease-in-out infinite;
+}
+
+@keyframes ruleGlow {
+    0%, 100% { opacity: 0.75; width: 96px; }
+    50%      { opacity: 1;    width: 128px; }
+}
+
+
+/* ==========================================
+   REDUCED MOTION — hold everything still
+   ========================================== */
 @media (prefers-reduced-motion: reduce) {
     .navbar,
-    .navbar a,
     .page *,
     .page *::before,
-    .page *::after {
+    .page *::after,
+    .js-anim .page .page-content {
         animation: none !important;
     }
-}
 
+    .js-anim .page .page-content {
+        opacity: 1 !important;
+        translate: none !important;
+    }
 
-.js-anim .page:not(.is-visible) .page-content {
-    pointer-events: none;
+    .scroll-container { scroll-behavior: auto; }
 }
 
 /* ==========================================================
@@ -1309,18 +1380,7 @@ p {
 }
 .hand-right img { object-position: right center; }
 
-/* hidden everywhere except while the last page is on screen */
-.js-anim .page:not(.is-visible) .image-container-hand {
-    visibility: hidden;
-}
-
-/* same fade-up entrance and pop-out exit as the other items */
-.js-anim #page4.is-visible .image-container-hand {
-    animation: revealIn 1.1s var(--ease-out) 0.9s backwards;
-}
-.js-anim .page.is-leaving .image-container-hand {
-    animation: popOut 0.22s var(--ease-exit) forwards;
-}
+/* the hands ride in with their slide, nothing of their own to do */
 
 /* phones: no space beside the contact list, so the images are left out */
 @media (max-width: 768px) {
@@ -1328,172 +1388,309 @@ p {
 }
 
 /* ==========================================================
-   PAGE 2 LAYOUT:  [ photo ] [ SKILLS ] [ 2 x 2 square boxes ]
-                   [        certificates row, full width    ]
-   Desktop only. Phones keep your original layout.
-   Edit the numbers in the first block.
-   ========================================================== */
-/* ========================================================== */
-/* ========================================================== */
-/* 1. DESKTOP LAYOUT (Replace your old desktop code with this) */
-@media (min-width: 769px) {
-    #page2 {
-        --layout-gap: 25px;          /* Clean, consistent gap between the 3 elements */
-        --top-row-height: 60vh;      /* Adjusts the overall height of the top block */
-        
-        /* Using fixed pixel widths stops the massive stretching */
-        --image-column-width: 340px; 
-        --heading-column-width: 50px;
-        --skills-column-width: 600px; 
-    }
+   PAGE 2 — SKILLS
+   The page reads as two bands with one spine down the left:
 
-    /* MAIN CONTAINER */
+     [S]  [ portrait ]  [ 2 x 2 skill cards      ]
+     [S]  [ Toolkit ............ Certifications  ]
+
+   The SKILLS pill is the spine and runs the full height of both
+   bands, which is what holds the composition together.
+   ========================================================== */
+#page2 {
+    position: relative;
+}
+
+@media (min-width: 769px) {
     #page2 .page-content.page2-layout {
         display: grid;
-        grid-template-columns: var(--image-column-width) var(--heading-column-width) var(--skills-column-width);
-        grid-template-rows: var(--top-row-height) auto; 
-        gap: var(--layout-gap);
-        
-        /* This rule forces the grid to clump tightly in the center of the screen */
-        justify-content: center; 
-        
-        margin-top: 5vh; 
-        max-width: 100%; /* Let justify-content handle the centering */
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    /* --- DIV 2: THE VERTICAL HEADING --- */
-    #page2 .vertical-upright-heading {
-        grid-column: 2; 
-        grid-row: 1;    
-        
-        display: flex;
-        align-items: center;
+        /* fixed spine, so the full-width lower band cannot inflate it */
+        grid-template-columns: 58px minmax(0, 250px) minmax(0, 1fr);
+        grid-template-areas:
+            "label photo cards"
+            "label extras extras";
+        align-items: stretch;
         justify-content: center;
-        height: 100%;
+        gap: 22px;
         width: 100%;
-        
-        /* Overrides the rogue margin-left: 2800px and transforms from your base code */
-        margin: 0 !important; 
-        transform: none !important;
-        padding: 0 !important;
-    }
-    
-    /* (Keep your existing CSS for DIV 1, DIV 3, and DIV 4 down here...) */
-}
-
-    /* =========================================
-       2. INDIVIDUAL DIV CONTROLS
-       ========================================= */
-
-    /* --- DIV 1: THE PHOTO --- */
-    #page2 .page2-photo {
-        grid-column: 1; /* Sits in column 1 */
-        grid-row: 1;    /* Sits in row 1 */
-        
-        height: 350px; 
-        width: 100%;  
-        border-radius: 18px;
-        overflow: hidden;
-        border: 1px solid rgba(228, 227, 227, 0.15);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        transform: translateY(-45px);
-    }
-    #page2 .page2-photo img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        max-width: 1120px;
+        margin: 0 auto;
     }
 
-    /* --- DIV 2: THE VERTICAL HEADING --- */
-   #page2 .vertical-upright-heading {
-    grid-column: 2;
-    grid-row: 1;
-    
-    /* 1. Unlocks both vertical (top) and horizontal (left) grid pinning */
-    align-self: start; 
-    justify-self: start;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 340px;
-    width: 100%;
-    
-    /* 2. Combine X (Left/Right) and Y (Up/Down) in ONE rule */
-    /* -405px = Moves LEFT | -20px = Moves UP */
-    transform: translate(-12px, -20px) !important;
-}
+    #page2 .vertical-upright-heading { grid-area: label; }
+    #page2 .page2-photo              { grid-area: photo; }
+    #page2 .page2-right-content      { grid-area: cards; }
+    #page2 .page2-extras             { grid-area: extras; }
 
-    /* --- DIV 3: THE SKILLS GRID (Right Side) --- */
-    #page2 .page2-right-content,
-    #page2 .skills-grid.horizontal-skills {
-        grid-column: 3; /* Sits in column 3 */
-        grid-row: 1;    /* Sits in row 1 */
-        
+    #page2 .vertical-upright-heading {
+        align-self: stretch;
         display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 equal columns inside the skills box */
-        grid-template-rows: repeat(2, 1fr);    /* 2 equal rows inside the skills box */
-        gap: 15px;                /* Shares the same gap variable */
-        height: 100%;
-        transform: translateY(-10px);
-        margin-left: -20px;
-    }
-
-    /* Individual Skill Boxes inside Div 3 */
-    #page2 .skills-category {
-        height: 90%; 
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        padding: 20px;
-    }
-    #page2 .skills-category h2 {
-        font-size: 1.55rem;
-        margin: 0 0 8px;
-    }
-    #page2 .skills-category p {
-        font-size: 2.88rem;
-        line-height: 1.3;
-        margin: 0 0 3px;
-    }
-
-    /* --- DIV 4: THE CERTIFICATES (Bottom) --- */
-    #page2 .badge-container {
-        grid-column: 1 / 4; /* Spans across all 3 columns from left to right */
-        grid-row: 2;        /* Sits in row 2 */
-        
-        width: 100%;
-        margin-top: 10px; /* Optional extra space above badges */
+        place-items: center;
+        box-sizing: border-box;      /* padding + border stay inside the 58px track */
+        width: 58px;
+        height: auto;
+        margin: 0 !important;
+        padding: 18px 6px !important;
+        transform: none !important;
     }
 }
 
-/* ========================================================== */
-/* 2. MOBILE LAYOUT */
-/* phones: the photo is left out, the rest stacks naturally */
+/* ---------- The portrait ---------- */
+#page2 .page2-photo {
+    width: 100%;
+    min-height: 240px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+#page2 .page2-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- The four skill cards ---------- */
+#page2 .page2-right-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+}
+
+#page2 .skills-grid.horizontal-skills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+#page2 .skills-category {
+    height: auto;
+    width: auto;
+    padding: 18px 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#page2 .skills-category h2 {
+    font-size: 1.3rem;
+    margin: 0 0 10px;
+}
+
+/* ==========================================================
+   THE LOWER BAND — toolkit and certifications side by side
+   ========================================================== */
+.page2-extras {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+
+.panel__title {
+    margin: 0;
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- Individual tool tiles ---------- */
+.tool-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tool {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    cursor: default;
+    transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.5, 1),
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.tool svg {
+    width: 24px;
+    height: 24px;
+    fill: #9b9ba2;
+    transition: fill 0.25s ease;
+}
+
+.tool:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.6);
+}
+
+.tool:hover svg { fill: #ffffff; }
+
+/* name appears above the tile on hover */
+.tool__name {
+    position: absolute;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    translate: -50% 4px;
+    padding: 4px 9px;
+    border-radius: 7px;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, translate 0.2s ease;
+}
+
+.tool:hover .tool__name,
+.tool:focus-visible .tool__name {
+    opacity: 1;
+    translate: -50% 0;
+}
+
+/* ---------- Certificates ---------- */
+.panel--certs .badge-container {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+    margin: 0;
+    flex: 1;
+}
+
+.panel--certs .certificate-badge {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    height: auto;
+    min-height: 96px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: #000000;
+    transition: transform 0.25s var(--ease-out), border-color 0.25s ease;
+}
+
+.panel--certs .certificate-badge:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+.panel--certs .badge-img {
+    max-height: 72px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* ==========================================================
+   PAGE 2 — NARROWER SCREENS
+   ========================================================== */
+
+/* Laptop: the portrait steps aside so the cards keep their width */
+@media (min-width: 769px) and (max-width: 1080px) {
+    #page2 .page-content.page2-layout {
+        grid-template-columns: 58px minmax(0, 1fr);
+        grid-template-areas:
+            "label cards"
+            "label extras";
+        max-width: 860px;
+    }
+
+    #page2 .page2-photo { display: none; }
+}
+
+/* Phone: one column, the spine lies flat as a pill above the cards */
 @media (max-width: 768px) {
-    .page2-photo { display: none; }
+    #page2 .page-content.page2-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center;
+        gap: 16px;
+    }
+
+    #page2 .page2-photo { display: none; }
+
+    #page2 .vertical-upright-heading {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        width: auto;
+        height: auto;
+        margin: 0 !important;
+        padding: 9px 28px !important;
+        transform: none !important;
+        border-radius: 999px;
+        letter-spacing: 8px;
+        font-size: 1.5rem !important;
+    }
+
+    #page2 .skills-category { padding: 14px 16px; }
+    #page2 .skills-category h2 { font-size: 1.15rem; }
+
+    .page2-extras {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .tool { width: 46px; height: 46px; border-radius: 11px; }
+    .tool svg { width: 21px; height: 21px; }
 }
 
-/* ========================================================== */
-/* 3. ANIMATIONS (Keep your original code here) */
-.js-anim .page:not(.is-visible):not(.is-leaving) .page2-photo { visibility: hidden; }
-.js-anim .page.is-visible .page2-photo {
-    animation: revealIn 1.1s var(--ease-out) 0.2s backwards;
+@media (max-width: 520px) {
+    #page2 .skills-grid.horizontal-skills { grid-template-columns: minmax(0, 1fr); }
+    .panel--certs .badge-container { flex-direction: column; }
 }
-.js-anim .page.is-leaving .page2-photo {
-    animation: popOut 0.22s var(--ease-exit) forwards;
-}
-#page2 .page2-photo { --x: -90px; --y: 0px; --s: 0.85; }
+
+/* the portrait rides in with its slide, nothing of its own to do */
 
 /* Add this anywhere in your style.css */
 #page2 .skills-category p {
     display: inline;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
+    font-weight: 700;
     line-height: 1.6;
     margin: 0;
+    color: var(--ink);
+}
+
+#page2 .skills-category h2 {
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-weight: 800;
+    color: var(--ink);
 }
 
 #page2 .skills-category p:not(:last-of-type)::after {

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 940" width="1080" height="940"
+     font-family="Helvetica, Arial, sans-serif" role="img"
+     aria-labelledby="lexagent-title lexagent-desc">
+  <title id="lexagent-title">LexAgent pipeline architecture</title>
+  <desc id="lexagent-desc">A case file is read by a language model to extract facts, then four code-only
+  stages retrieve statute sections, apply legal tests, compute the penalty band and write a report.
+  A local Ollama model serves the extraction step and a SQLite database serves the three rule stages.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa0a6"/>
+    </marker>
+  </defs>
+
+  <style>
+    .box   { rx: 10; ry: 10; stroke-width: 1.5; }
+    .grey  { fill: #4a4a46; stroke: #5f5f5a; }
+    .llm   { fill: #4b3f9e; stroke: #6356c4; }
+    .code  { fill: #0e5c47; stroke: #18805f; }
+    .t     { fill: #ffffff; font-size: 20px; font-weight: 700; text-anchor: middle; }
+    .s     { fill: #c6c6c2; font-size: 15px; text-anchor: middle; }
+    .sl    { fill: #bdb7ea; font-size: 15px; text-anchor: middle; }
+    .sc    { fill: #8fd8bf; font-size: 15px; text-anchor: middle; }
+    .link  { stroke: #9aa0a6; stroke-width: 1.8; fill: none; }
+    .lg    { fill: #d7d7d4; font-size: 17px; }
+  </style>
+
+  <rect width="1080" height="940" fill="#111111"/>
+
+  <!-- ============ left column: the pipeline ============ -->
+  <rect class="box grey" x="32"  y="32"  width="390" height="96"/>
+  <text class="t" x="227" y="70">case.json</text>
+  <text class="s" x="227" y="97">Facts + both submissions</text>
+
+  <rect class="box llm"  x="32"  y="176" width="390" height="96"/>
+  <text class="t" x="227" y="214">1. Extract facts</text>
+  <text class="sl" x="227" y="241">llama3.2, quotes verified</text>
+
+  <rect class="box code" x="32"  y="312" width="390" height="92"/>
+  <text class="t" x="227" y="348">2. Retrieve sections</text>
+  <text class="sc" x="227" y="375">BM25, no LLM</text>
+
+  <rect class="box code" x="32"  y="446" width="390" height="92"/>
+  <text class="t" x="227" y="482">3. Legal tests</text>
+  <text class="sc" x="227" y="509">rules.py, no LLM</text>
+
+  <rect class="box code" x="32"  y="580" width="390" height="92"/>
+  <text class="t" x="227" y="616">4. Penalty and band</text>
+  <text class="sc" x="227" y="643">From DB row, no LLM</text>
+
+  <rect class="box grey" x="32"  y="720" width="390" height="96"/>
+  <text class="t" x="227" y="758">report.py</text>
+  <text class="s" x="227" y="785">Markdown court order</text>
+
+  <!-- ============ right column: the two services ============ -->
+  <rect class="box llm"  x="672" y="176" width="376" height="96"/>
+  <text class="t" x="860" y="214">Ollama</text>
+  <text class="sl" x="860" y="241">llama3.2, localhost</text>
+
+  <rect class="box grey" x="672" y="312" width="376" height="360"/>
+  <text class="t" x="860" y="462">lexagent.db</text>
+  <text class="s" x="860" y="500">88 offences</text>
+  <text class="s" x="860" y="534">13 exceptions and defences</text>
+  <text class="s" x="860" y="568">7 definitions, precedents</text>
+
+  <!-- ============ flow down the pipeline ============ -->
+  <path class="link" marker-end="url(#arrow)" d="M 227 128 L 227 170"/>
+  <path class="link" marker-end="url(#arrow)" d="M 227 272 L 227 306"/>
+  <path class="link" marker-end="url(#arrow)" d="M 227 404 L 227 440"/>
+  <path class="link" marker-end="url(#arrow)" d="M 227 538 L 227 574"/>
+  <path class="link" marker-end="url(#arrow)" d="M 227 672 L 227 714"/>
+
+  <!-- ============ services feeding the stages ============ -->
+  <path class="link" marker-end="url(#arrow)" d="M 672 224 L 428 224"/>
+  <path class="link" marker-end="url(#arrow)" d="M 672 358 L 428 358"/>
+  <path class="link" marker-end="url(#arrow)" d="M 672 492 L 428 492"/>
+  <path class="link" marker-end="url(#arrow)" d="M 672 626 L 428 626"/>
+
+  <!-- ============ legend ============ -->
+  <rect x="32"  y="872" width="22" height="22" rx="4" fill="#4b3f9e" stroke="#6356c4" stroke-width="1.5"/>
+  <text class="lg" x="68"  y="889">Model reads the text</text>
+
+  <rect x="390" y="872" width="22" height="22" rx="4" fill="#0e5c47" stroke="#18805f" stroke-width="1.5"/>
+  <text class="lg" x="426" y="889">Plain code decides</text>
+</svg>
