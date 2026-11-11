@@ -54,9 +54,11 @@ body::before {
     pointer-events: none; 
 }
 
-/* LAYER 3 (GREY VEIL): a neutral grey over the video, so white text reads
-   against it. Raise the last number for a darker grey, lower it for lighter.
-   It is a plain grey on purpose, so no blue or purple creeps back in. */
+/* LAYER 3 (VEIL): near black down the left, easing to grey on the right, so
+   text on the left of each slide sits on the darkest part while the video
+   shows through more on the right. Every stop is a plain grey on purpose, so
+   no blue or purple creeps back in.
+   To go back to one flat tone: background: rgba(38, 38, 42, 0.62); */
 body::after {
     content: "";
     position: fixed;
@@ -64,7 +66,14 @@ body::after {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(38, 38, 42, 0.62);
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.90) 0px,
+        rgba(0, 0, 0, 0.90) 60px,      /* holds flat black before easing off */
+        rgba(14, 14, 16, 0.82) 22%,
+        rgba(34, 34, 38, 0.68) 55%,
+        rgba(62, 62, 66, 0.48) 100%
+    );
     z-index: -1;                     /* Sits directly on top of the video player */
     pointer-events: none;
 }
@@ -1288,14 +1297,11 @@ p {
     50%      { opacity: 0.85; scale: 1.06; }
 }
 
-/* The heading glows very slowly, like a light turning over */
+/* No glow on the heading: plain white letters read cleaner against the dark
+   left edge than a halo does. The slow pulse that used to live here was
+   washing the whole word out at its brightest. */
 #page1 .giant-heading {
-    animation: headingGlow 8s ease-in-out infinite;
-}
-
-@keyframes headingGlow {
-    0%, 100% { text-shadow: 0 0 34px rgba(255, 255, 255, 0.16); }
-    50%      { text-shadow: 0 0 54px rgba(255, 255, 255, 0.42); }
+    text-shadow: none;
 }
 
 /* The accent rule under the heading pulses very gently */
